@@ -353,14 +353,16 @@ class PongAgent:
         print("Finish training at: " + time.asctime(time.localtime(start_time)))
 
 
-agent = PongAgent()
-agent.train(
-    replay_buffer_fill_len=100,
-    batch_size=256,
-    episodes=10**5,
-    stop_reward=19,
-    max_epsilon_steps=10**5,
-    epsilon_start=1.0,
-    epsilon_final=0.02,
-    sync_target_net_freq=10000,
-)
+if __name__ == "__main__":
+
+    agent = PongAgent()
+    agent.train(
+        replay_buffer_fill_len=100,
+        batch_size=256,
+        episodes=10**5,
+        stop_reward=19,
+        max_epsilon_steps=10**5,
+        epsilon_start=1.0,
+        epsilon_final=0.02,
+        sync_target_net_freq=10000,
+    )
