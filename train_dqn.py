@@ -197,7 +197,7 @@ class PongAgent:
 
         :param filename: model filename
         """
-        self.dqn.load_state_dict(torch.load(filename))
+        self.dqn.load_state_dict(torch.load(filename, map_location=torch.device("cpu")))
         self.sync_target_network()
 
     def play(self, episodes):
@@ -213,7 +213,7 @@ class PongAgent:
                 action = self.select_action(
                     state, 0
                 )  # force to choose an action from the network
-                time.sleep(0.1)
+                time.sleep(0.005)
                 state, reward, done, _ = self.env.step(action)
                 self.env.render()
 
