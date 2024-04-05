@@ -213,7 +213,7 @@ class PongAgent:
                 action = self.select_action(
                     state, 0
                 )  # force to choose an action from the network
-                time.sleep(0.005)
+                time.sleep(0.0025)
                 state, reward, done, _ = self.env.step(action)
                 self.env.render()
 
