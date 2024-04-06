@@ -36,17 +36,7 @@ class PongAgent:
     def __init__(self):
         self.env = wrap_dqn(gym.make("PongDeterministic-v4"))
         self.num_actions = self.env.action_space.n
-
-        self.dqn = DQN(self.num_actions)
-        self.target_dqn = DQN(self.num_actions)
-
-        if use_gpu:
-            self.dqn.cuda()
-            self.target_dqn.cuda()
-        elif use_mps:
-            self.dqn = self.dqn.to(torch.device("mps"))
-            self.target_dqn = self.target_dqn.to(torch.device("mps"))
-
+        self.reinit()
         self.buffer = ReplayMemory(1000000)
 
         self.gamma = 0.99
@@ -213,7 +203,7 @@ class PongAgent:
                 action = self.select_action(
                     state, 0
                 )  # force to choose an action from the network
-                time.sleep(0.0025)
+                time.sleep(0.001)
                 state, reward, done, _ = self.env.step(action)
                 self.env.render()
 
@@ -222,6 +212,18 @@ class PongAgent:
         Closes the environment. Should be called to clean-up
         """
         self.env.close()
+
+    def reinit(self):
+        # re-init all networks
+        self.dqn = DQN(self.num_actions)
+        self.target_dqn = DQN(self.num_actions)
+
+        if use_gpu:
+            self.dqn.cuda()
+            self.target_dqn.cuda()
+        elif use_mps:
+            self.dqn = self.dqn.to(torch.device("mps"))
+            self.target_dqn = self.target_dqn.to(torch.device("mps"))
 
     def train(
         self,
